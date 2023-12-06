@@ -1,0 +1,40 @@
+version: '3.9'
+
+volumes:
+  data-point-volume:
+  data-volume:
+
+networks:
+  dbpoint:
+    driver: bridge
+  pointnw:
+    driver: bridge
+
+services:
+  web:
+    container_name: data-point
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile
+    env_file: ./.env
+    volumes:
+      - data-volume:/home/data-point/web/staticfiles
+    networks:
+      - dbpoint
+      - pointnw
+    ports:
+      - 5000:5000
+    depends_on:
+      - api-db
+  
+  api-db:
+    image: postgres:15-alpine
+    container_name: data-point-db
+    volumes:
+      - "data-point-volume:/var/lib/postgresql/data"
+    expose:
+      - 5432
+    env_file:
+      - ./.env.db
+    networks:
+      - dbpoint
