@@ -5,6 +5,10 @@ description = ""
 authors = ["Noat"]
 readme = "README.md"
 
+packages = [
+    { include = "src" }
+]
+
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
 fastapi = "0.103.2"

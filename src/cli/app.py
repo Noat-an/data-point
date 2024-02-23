@@ -13,6 +13,6 @@ def app_start(prod: bool) -> None:
     uvicorn.run(
         "src.manage:app",
         host="0.0.0.0",
-        port=5000,
+        port=7000,
         workers=2,
         reload=(not prod))

@@ -1,7 +1,7 @@
 import sqlalchemy as sa
 
-from apps.api.test import model
-from db.common._repository import BaseRepository
+from src.apps.api.test import model
+from src.db.common._repository import BaseRepository
 
 
 class TestRepository(BaseRepository):
