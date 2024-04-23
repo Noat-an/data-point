@@ -18,5 +18,5 @@ class Test(TableModelMixin, db.Base):
                                     default=uuid4, comment="Уникальный идентификатор")
     create_stamp: Mapped[datetime] = mapped_column(sa.TIMESTAMP,
                                                    comment="Дата создания",
-                                                   default=datetime.utcnow)
+                                                   default=datetime.now)
     amount: Mapped[int] = mapped_column(sa.INTEGER, nullable=False, comment="Сумма")

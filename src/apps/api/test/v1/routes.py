@@ -7,18 +7,23 @@ from src.apps.api.test import schemas
 from src.apps.api.test import repositories
 from src.apps.api.test import model
 
-router = APIRouter(prefix="/test")
+router = APIRouter(prefix="/v1")
 
 
-@router.get("/", response_model=list[schemas.Test], summary="Get test sequence")
+@router.get(
+    "/getTestValue",
+    response_model=list[schemas.Test],
+    summary="Get test sequence")
 async def get_test(
     session: SessionDepends
 ) -> list[schemas.Test]:
-    test = await repositories.TestRepository(session).get_list()
-    return test
+    repository = await repositories.TestRepository(session).get_list()
+    if not repository:
+        raise HTTPException(status_code=404, detail="Not found")
+    return repository
 
 
-@router.post("/", summary="Add new test sequence")
+@router.post("/addTestValue", summary="Add new test sequence")
 async def add_new_order(
     session: SessionDepends,
     test_sq: list[schemas.Test]
@@ -28,5 +33,5 @@ async def add_new_order(
     dto_test = model.Test(
         amount=500
     )
-    await repositories.TestRepository(session).add(dto_test)
+    await repositories.TestRepository(session).add_test_row(dto_test)
     return JSONResponse(status_code=201, content={"result": "ok"})

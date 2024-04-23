@@ -26,3 +26,5 @@ venv
 .venv
 config.cfg
 base.db
+
+poetry.lock
