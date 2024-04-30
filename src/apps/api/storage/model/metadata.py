@@ -48,19 +48,18 @@ class Storage(TableModelMixin, db.Base):
         sa.UUID, primary_key=True,
         default=uuid4, comment="Уникальный идентификатор"
     )
-    type: Mapped[StorageType]
-    service_account_info: Mapped[str] = mapped_column(
-        sa.TEXT,
-        comment="инфа для коннекта"
-    )  # TODO надо подумать как хранить пока просто текстом
     owner_id: Mapped[Optional[str]] = mapped_column(
         sa.ForeignKey("storage_owner.id", ondelete="SET NULL"),
         comment="id владельца хранилища"
     )
+    type: Mapped[StorageType]
+    service_account_info: Mapped[str] = mapped_column(
+        sa.TEXT,
+        comment="инфа для коннекта"
+    )  # TODO надо подумать как хранить пока просто тексто
     url: Mapped[str] = mapped_column(
         sa.String, nullable=False, 
-        comment="часть URL источника"
-        # полный путь генерируется из части типа источника и данной строки пренадлежащей владельцу
+        comment="URL источника"
     )
     inner_stamp: Mapped[datetime] = mapped_column(
         sa.TIMESTAMP, comment="Дата добавления",

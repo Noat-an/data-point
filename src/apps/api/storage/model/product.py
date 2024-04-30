@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 from uuid import uuid4
 
 import sqlalchemy as sa
@@ -18,11 +19,15 @@ class Product(TableModelMixin, db.Base):
         sa.UUID, primary_key=True,
         default=uuid4, comment="Уникальный идентификатор"
     )
+    name: Mapped[str] = mapped_column(
+        sa.TEXT, comment="Наименование дата-продукта"
+    )
     source_id: Mapped[str] = mapped_column(
         sa.UUID, comment="Уникальный идентификатор источника"
     )
-    owner_id: Mapped[str] = mapped_column(
-        sa.UUID, comment="Уникальный идентификатор владельца"
+    owner_id: Mapped[Optional[str]] = mapped_column(
+        sa.ForeignKey("storage_owner.id", ondelete="SET NULL"),
+        comment="id владельца хранилища"
     )
     size: Mapped[int] = mapped_column(
         sa.INTEGER, nullable=False, comment="Размер в байтах"
@@ -49,7 +54,8 @@ class ProductParts(TableModelMixin, db.Base):
         default=uuid4, comment="Уникальный идентификатор"
     )
     product_id: Mapped[str] = mapped_column(
-        sa.UUID, comment="Уникальный идентификатор товара"
+        sa.ForeignKey("product.id", ondelete="CASCADE"),
+        comment="Уникальный идентификатор товара"
     )
     part_num: Mapped[int] = mapped_column(
         sa.INTEGER, comment="порядковый номер части"
@@ -68,12 +74,17 @@ class ProductParts(TableModelMixin, db.Base):
 
 
 class PartQuality(TableModelMixin, db.Base):
+    __tablename__ = "parts_quality"
+    __table_args__ = {
+        "comment": "качество партиций дата-продукта",
+    }
     id: Mapped[str] = mapped_column(
         sa.UUID, primary_key=True,
         default=uuid4, comment="Уникальный идентификатор записи"
     )
     part_id: Mapped[str] = mapped_column(
-        sa.UUID, comment="Уникальный идентификатор куска"
+        sa.ForeignKey("parts.id", ondelete="CASCADE"),
+        comment="Уникальный идентификатор куска"
     )
     metric_id: Mapped[str] = mapped_column(
         sa.UUID, comment="Уникальный идентификатор метрики"
