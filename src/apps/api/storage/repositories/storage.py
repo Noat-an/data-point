@@ -7,7 +7,7 @@ from src.db.common._repository import BaseRepository
 class RemoteStorageRepository(BaseRepository):
 
     async def get_storage_list(self, owner_id) -> list[model.Storage]:
-        result = await self.session.execute(
+        stmt = await self.session.execute(
             sa.select(
                 model.Storage.type,
                 model.Storage.id,
@@ -16,10 +16,7 @@ class RemoteStorageRepository(BaseRepository):
                 model.Storage.owner_id == owner_id
             )
         )
-        return result.all()
+        return stmt.all()
 
     async def add_storage(self, obj: model.Storage) -> None:
-        return await super().add(obj)
-
-    async def add_owner(self, obj: model.StorageOwner) -> None:
         return await super().add(obj)

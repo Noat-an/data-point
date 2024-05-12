@@ -44,6 +44,27 @@ class Product(TableModelMixin, db.Base):
     )
 
 
+class QualityIndex(TableModelMixin, db.Base):
+    __tablename__ = "quality_index"
+    __table_args__ = {
+        "comment": "Справочник показателей качества продукта",
+    }
+    id: Mapped[str] = mapped_column(
+        sa.UUID, primary_key=True,
+        default=uuid4, comment="Уникальный идентификатор записи"
+    )
+    name: Mapped[str] = mapped_column(
+        sa.TEXT, comment="Наименование показателя"
+    )
+    limit: Mapped[int] = mapped_column(
+        sa.INTEGER, comment="Предельное значение метрики"
+    )
+    create_stamp: Mapped[datetime] = mapped_column(
+        sa.TIMESTAMP, comment="Дата создания",
+        default=datetime.now
+    )
+
+
 class ProductParts(TableModelMixin, db.Base):
     __tablename__ = "parts"
     __table_args__ = {
@@ -87,7 +108,8 @@ class PartQuality(TableModelMixin, db.Base):
         comment="Уникальный идентификатор куска"
     )
     metric_id: Mapped[str] = mapped_column(
-        sa.UUID, comment="Уникальный идентификатор метрики"
+        sa.ForeignKey("quality_index.id", ondelete="CASCADE"),
+        comment="Уникальный идентификатор метрики"
     )
     value: Mapped[int] = mapped_column(
         sa.INTEGER, comment="значение метрики"

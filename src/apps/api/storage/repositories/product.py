@@ -26,5 +26,5 @@ class ProductRepository(BaseRepository):
         )
         return result.all()
 
-    async def add_product_part(self, obj: model.ProductParts) -> None:
+    async def add_product(self, obj: model.ProductParts) -> None:
         return await super().add(obj)

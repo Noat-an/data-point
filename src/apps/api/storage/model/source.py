@@ -25,9 +25,8 @@ class Source(TableModelMixin, db.Base):
         sa.UUID, comment="Уникальный идентификатор владельца"
     )
     url: Mapped[str] = mapped_column(
-        sa.String, nullable=False, 
+        sa.String, nullable=False,
         comment="часть URL источника"
-        # полный путь генерируется из части типа источника и данной строки пренадлежащей владельцу
     )
     inner_stamp: Mapped[datetime] = mapped_column(
         sa.TIMESTAMP, comment="Дата добавления",

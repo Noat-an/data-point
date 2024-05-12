@@ -7,7 +7,6 @@ class MainSettings(BaseSettings):
     sql_port: int
     debug: int
     database: str
-    google_drive_api_key: str
 
     model_config = SettingsConfigDict(
         env_file=".env",
